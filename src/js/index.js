@@ -2,6 +2,7 @@ var root = window.player
 var nowIndex = 0
 var dataList
 var len 
+var audio = root.audioManager
 function getData(url) {
   $.ajax({
     type: 'GET',
@@ -9,8 +10,12 @@ function getData(url) {
     success: function (data) {   
       dataList = data
       len = dataList.length
+      // 渲染背景图片和圆盘图片
       root.render(dataList[0])
+      // 绑定事件
       bindEvent()
+      // 加载音频资源
+      audio.getAudio(data[0].audio)
       console.log(dataList)
     },
     error: function () {
@@ -27,6 +32,7 @@ function bindEvent() {
       nowIndex--
     }
     root.render(dataList[nowIndex])
+    audio.getAudio(dataList[nowIndex].audio)
   })
   $('.next').on('click', function () {
     if (nowIndex == len - 1) {
@@ -35,6 +41,15 @@ function bindEvent() {
       nowIndex++
     }
     root.render(dataList[nowIndex])
+    audio.getAudio(dataList[nowIndex].audio)
+  })
+  $('.play').on('click', function () {
+    if (audio.status == 'pause') {
+      audio.play()
+    } else {
+      audio.pause()
+    }
+    $('.play').toggleClass('playing')
   })
 }
 
