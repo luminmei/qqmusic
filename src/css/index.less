@@ -1,0 +1,104 @@
+*{
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+body{
+  font-size:12px;
+  .wrapper{
+    width:100vw;
+    height:100vh;
+    padding-top:60px;
+    box-sizing: border-box;
+    background-color: rgba(0,0,0,0.2);
+    .song-img{
+      // 自适应的盒子
+      // 高度设置为理想的百分比
+      // 高度设置为0
+      position:relative;
+      width:70%;
+      height:0;
+      padding-top:70%; //根据父级的宽高来计算百分比
+      margin:0 auto;
+      .img-box{
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        border-radius: 50%;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width:75%;
+          height:75%;
+          border-radius: 50%;
+        }
+      }
+    }
+    .song-info{
+      margin-top:18px;
+      width:100%;
+      text-align: center;
+      height:126px;
+      color:#fff;
+      .song-name {
+          font-size:24px;
+          line-height:36px;
+          margin-bottom:8px;
+      }
+    }
+    .pro {
+      display: flex;
+      .cur-time,
+      .all-time {
+        width:60px;
+        height:40px;
+        color:#fff;
+        text-align: center;
+        line-height: 40px;
+      }
+      .pro-wrap {
+        flex:1;
+      }
+    }
+    .control{
+      width:100%;
+      height:60px;
+      position:absolute;
+      bottom:0;
+      background-color: rgba(0,0,0,0.6);
+      display: flex;
+      .btn {
+        flex: 1;
+        height:100%;
+        background-repeat: no-repeat;
+        background-size:20px;
+        background-position: center center;
+      }
+      .like {
+        background-image: url(../image/icon-like.png);
+        &.liking{ // 同时具有两个 同时存在
+          background-image: url(../image/icon-like-solid.png);
+        }
+      }
+      .prev {
+        background-image: url(../image/icon-prev.png);
+      }
+      .play {
+        background-image: url(../image/icon-play.png);
+        &.playing{
+          background-image: url(../image/icon-pause.png);
+        }
+      }
+      .next {
+        background-image: url(../image/icon-next.png);
+      }
+      .list {
+        background-image: url(../image/icon-list.png);
+      }
+    }
+  }
+}
