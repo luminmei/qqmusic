@@ -1,9 +1,12 @@
+var root = window.player
+
 function getData(url) {
   $.ajax({
     type: 'GET',
     url: url,
     success: function (data) {
       console.log(data)
+      root.render(data[0])
     },
     error: function () {
       console.log(error)
@@ -14,7 +17,7 @@ function getData(url) {
 getData ("../mock/data.json")
 
 
-// 信息+图片渲染到页面上
+// 信息+图片渲染到页面上  render
 // 点击按钮
 // 音频的播放与暂停 切割
 // 进度条运动与拖拽
