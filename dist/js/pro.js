@@ -54,6 +54,7 @@
       if (percent <= 1 && (flag == false)) {
         update(percent)
       } else {
+        flag = true
         cancelAnimationFrame(frameId)
       }
       // 隔着屏幕刷新频率的时间  动起来
@@ -77,6 +78,13 @@
     var curTime = curDuration * per  // 当前时间*百分比 = 走过的时间
     curTime = formatTime(curTime)
     $scope.find('.cur-time').html(curTime)
+
+    // 进度条的百分比
+    var perX = (per - 1) * 100 + '%'
+    console.log(perX)
+    $scope.find('.pro-top').css({
+      'transform': 'translateX(' + perX + ')'
+    })
   }
 
   root.pro = {

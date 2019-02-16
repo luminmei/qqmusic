@@ -65,6 +65,44 @@ body .wrapper .pro .all-time {
 }
 body .wrapper .pro .pro-wrap {
   flex: 1;
+  position: relative;
+  overflow: hidden;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+body .wrapper .pro .pro-wrap .pro-bottom,
+body .wrapper .pro .pro-wrap .pro-top {
+  position: absolute;
+  top: 20px;
+  height: 1px;
+  width: 100%;
+}
+body .wrapper .pro .pro-wrap .pro-bottom {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+body .wrapper .pro .pro-wrap .pro-top {
+  background-color: #fff;
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%);
+  position: relative;
+}
+body .wrapper .pro .pro-wrap .pro-top .slider {
+  width: 21px;
+  height: 21px;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .wrapper .pro .pro-wrap .pro-top .slider::after {
+  content: '';
+  display: block;
+  height: 5px;
+  width: 5px;
+  background-color: #fff;
+  border-radius: 50%;
 }
 body .wrapper .control {
   width: 100%;
