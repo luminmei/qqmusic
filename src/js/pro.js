@@ -7,9 +7,16 @@
   var startTime // 开始时间
   var lastPer = 0// 停止时间的百分比
 
+  var flag = true // 标记是否在播放歌曲
+
   // 每一首歌的总时间是  duration
   function renderAllTime(time) {
+    // 获取到总时间
     curDuration = time
+
+    // 设置左侧时间为0
+    lastPer = 0
+
     // 将时间格式转换一下
     // 拿到的是秒
     time = formatTime(time)
@@ -32,6 +39,7 @@
 
   // 触发开始按钮的时候就调用 音乐播放  有play的地方都有它
   function start() {
+    flag = false
     // 获取当前系统的时间
     startTime = new Date().getTime();
     function frame() {
@@ -43,7 +51,7 @@
       // lasetPer 记录停止的时间
       var percent = lastPer + (curTime - startTime) / (curDuration * 1000)
       // 因为左侧时间不能比右侧大，所以小于等于1的时候才去渲染时间
-      if (percent <= 1) {
+      if (percent <= 1 && (flag == false)) {
         update(percent)
       } else {
         cancelAnimationFrame(frameId)
@@ -55,6 +63,7 @@
   }
   // 取消时间流逝  停止计时
   function stop() {
+    flag = true
     cancelAnimationFrame(frameId)
     // 记录当前停止时间
     var stopTime = new Date().getTime()
