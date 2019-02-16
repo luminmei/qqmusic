@@ -21,6 +21,10 @@
       this.audio.src = src
       // 加载音频，并不进行播放
       this.audio.load()
+    },
+    playTo:function(time) {
+      this.audio.currentTime = time
+      this.play()
     }
   }
   root.audioManager = new AudioManager()

@@ -10,7 +10,7 @@ function getData(url) {
   $.ajax({
     type: 'GET',
     url: url,
-    success: function (data) {   
+    success: function (data) {
       dataList = data
       len = dataList.length
       control = new root.controlIndex(len) // 把长度传到控制的索引
@@ -18,6 +18,8 @@ function getData(url) {
       root.render(dataList[0])
       // 绑定事件
       bindEvent()
+      // 绑定拖动事件
+      bindTouch()
       // 加载音频资源
       audio.getAudio(data[0].audio)
       $('body').trigger('play:change', 0)
@@ -38,14 +40,14 @@ function bindEvent() {
     if (audio.status == 'play') {
       audio.play()
       // 记录播放了多少时间
-      root.pro.start()
+      root.pro.start(0)
       // 旋转图片
       rotated(0)
     }
     // 渲染总时长
     root.pro.renderAllTime(dataList[index].duration)
     // 切歌的时候把位置置为0
-    $('.img-box').attr('data-deg',0)
+    $('.img-box').attr('data-deg', 0)
     $('.img-box').css({
       'transform': 'rotateZ(0deg)',
       'transition': 'none'
@@ -105,7 +107,7 @@ function rotated(deg) {
   timer = setInterval(function () {
     deg += 2
     // 因为获取的时候麻烦，所以直接把值存在标签上
-    $('.img-box').attr('data-deg',deg)
+    $('.img-box').attr('data-deg', deg)
     $('.img-box').css({
       'transform': 'rotateZ(' + deg + 'deg)',
       'transition': 'all 1s linear'
@@ -113,8 +115,41 @@ function rotated(deg) {
   }, 200)
 }
 
-getData ("../mock/data.json")
+// 拖拽进度条
+function bindTouch() {
+  var $slider = $('.slider')
+  var offset = $('.pro-bottom').offset();
+  // 进度条距离左边的距离
+  var left = offset.left
+  // 进度条底部的宽度
+  var width = offset.width
+  $slider.on('touchstart', function () {
+    // 拖动的时候不播放音乐
+    root.pro.stop()
+  }).on('touchmove', function (e) {
+    // 通过移动的距离算百分比
+    var x = e.changedTouches[0].clientX;
+    var per = (x - left) / width
+    if (per > 0 && per <= 1) {
+      // 更新进度条
+      root.pro.update(per)
+    }
+  }).on('touchend', function (e) {
+    // 音乐需要跳转到百分比的位置
+    // 跳转到小圆点的位置
+    var x = e.changedTouches[0].clientX;
+    var per = (x - left) / width
+    if (per > 0 && per <= 1) {
+      var curTime = per * dataList[control.index].duration;
+      audio.playTo(curTime)
+      // 设置按钮样式 为播放
+      $('.play').toggleClass('playing')
+      root.pro.start(per)
+    }
+  })
+}
 
+getData("../mock/data.json")
 
 // 信息+图片渲染到页面上  render
 // 点击按钮

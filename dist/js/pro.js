@@ -38,7 +38,11 @@
   }
 
   // 触发开始按钮的时候就调用 音乐播放  有play的地方都有它
-  function start() {
+  function start(p) {
+    
+    // 为了拖动的时候进度条跟着变化
+    lastPer = p == undefined ? lastPer : p
+
     flag = false
     // 获取当前系统的时间
     startTime = new Date().getTime();
@@ -81,7 +85,6 @@
 
     // 进度条的百分比
     var perX = (per - 1) * 100 + '%'
-    console.log(perX)
     $scope.find('.pro-top').css({
       'transform': 'translateX(' + perX + ')'
     })
@@ -90,6 +93,7 @@
   root.pro = {
     renderAllTime: renderAllTime,
     start: start,
-    stop: stop
+    stop: stop,
+    update: update
   }
 })(window.Zepto, window.player || (window.player = {}))
