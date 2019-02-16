@@ -4,6 +4,7 @@ var dataList // 所有的数据
 var len  // 总数据长度
 var audio = root.audioManager // 控制音频播放、停止、加载的实例
 var control// 控制索引，拿到的是控制索引的实例
+var timer // 记录计时器
 
 function getData(url) {
   $.ajax({
@@ -19,7 +20,9 @@ function getData(url) {
       bindEvent()
       // 加载音频资源
       audio.getAudio(data[0].audio)
+      $('body').trigger('play:change', 0)
       console.log(dataList)
+      console.log(root)
     },
     error: function () {
       console.log(error)
@@ -34,7 +37,19 @@ function bindEvent() {
     audio.getAudio(dataList[index].audio)
     if (audio.status == 'play') {
       audio.play()
+      // 记录播放了多少时间
+      root.pro.start()
+      // 旋转图片
+      rotated(0)
     }
+    // 渲染总时长
+    root.pro.renderAllTime(dataList[index].duration)
+    // 切歌的时候把位置置为0
+    $('.img-box').attr('data-deg',0)
+    $('.img-box').css({
+      'transform': 'rotateZ(0deg)',
+      'transition': 'none'
+    })
   })
   $('.prev').on('click', function () {
     // if (nowIndex == 0) {
@@ -67,13 +82,36 @@ function bindEvent() {
   $('.play').on('click', function () {
     if (audio.status == 'pause') {
       audio.play()
+      // 记录播放了多少时间
+      root.pro.start()
+      // 旋转图片
+      var deg = $('.img-box').attr('data-deg')
+      rotated(deg)
     } else {
       audio.pause()
+      root.pro.stop()
+      // 暂停旋转
+      clearInterval(timer)
     }
     $('.play').toggleClass('playing') // 切换按钮的图片
   })
 }
 
+function rotated(deg) {
+  // 在哪个地方调用的play播放就让转盘旋转
+  // 调用pause就让转盘停止
+  clearInterval(timer)
+  deg = +deg // 做一个类型转换
+  timer = setInterval(function () {
+    deg += 2
+    // 因为获取的时候麻烦，所以直接把值存在标签上
+    $('.img-box').attr('data-deg',deg)
+    $('.img-box').css({
+      'transform': 'rotateZ(' + deg + 'deg)',
+      'transition': 'all 1s linear'
+    })
+  }, 200)
+}
 
 getData ("../mock/data.json")
 
